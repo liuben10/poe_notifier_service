@@ -52,32 +52,39 @@ class PoeBeanConfiguration {
         for (filterType in PoeStringModFilterType.values()) {
             modFilters.add(PoeSimpleStringModItemFilter(filterType))
         }
-        modFilters.add(
-                ExactStringMatchFilterService(
-                        {it -> it.league},
-                        {filter -> filter.league}
-                )
-        )
-        var filter = PoeItemFilter("Betrayal")
-        filter.explicitMods.addAll(
+        modFilters.addAll(
                 arrayListOf(
-                    PoeModStringItemFilter(
-                            "^\\+(.+) to maximum Energy Shield$",
-                            40,
-                            true
+                    ExactStringMatchFilterService(
+                            {it -> it.league},
+                            {filter -> filter.league}
                     ),
-                        PoeModStringItemFilter(
-                                "^(.+)% increased Energy Shield$",
-                                30,
-                                true
-                        )
+                    ExactStringMatchFilterService(
+                            {it -> it.name},
+                            {filter -> filter.name}
+                    )
                 )
         )
+        val filter = PoeItemFilter("Betrayal", 2)
+        filter.name = "Loreweave"
+//        filter.explicitMods.addAll(
+//                arrayListOf(
+//                    PoeModStringItemFilter(
+//                            "^\\+(.+) to maximum Energy Shield$",
+//                            40,
+//                            true
+//                    ),
+//                        PoeModStringItemFilter(
+//                                "^(.+)% increased Energy Shield$",
+//                                30,
+//                                true
+//                        )
+//                )
+//        )
         val filters = arrayListOf(filter)
         return PoeChangeFilter(
                 modFilters,
                 filters,
-                3
+                2
         )
     }
 

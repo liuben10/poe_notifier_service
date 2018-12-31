@@ -8,11 +8,24 @@ import java.util.regex.Pattern
 
 class PoeSimpleStringModItemFilter(
         val filterType: PoeStringModFilterType
-) : PoeItemFilterService {
+) : PoeItemFilterService() {
+    override fun shouldUseFilter(filter: PoeItemFilter): Boolean {
+        when(filterType) {
+            PoeStringModFilterType.CRAFTED -> return !filter.craftedMods.isEmpty()
+            PoeStringModFilterType.EXPLICIT -> return !filter.explicitMods.isEmpty()
+            PoeStringModFilterType.IMPLICIT -> return !filter.implicitMods.isEmpty()
+            PoeStringModFilterType.ENCHANT -> return !filter.enchantMods.isEmpty()
+            PoeStringModFilterType.UTILITY -> return !filter.utilityMods.isEmpty()
+            else -> {
+                log.warn("Unrecognized filter type $filterType")
+                return false
+            }
+        }
+    }
+
     val log = LoggerFactory.getLogger(PoeSimpleStringModItemFilter::class.simpleName)
 
-    override fun filter(item: PoeItem, filters: List<PoeItemFilter>): Boolean {
-        for (filter in filters) {
+    override fun filterSingle(item: PoeItem, filter: PoeItemFilter): Boolean {
             when(filterType) {
                 PoeStringModFilterType.CRAFTED -> return filterCraftedMods(item, filter)
                 PoeStringModFilterType.EXPLICIT -> return filterExplicitMods(item, filter)
@@ -24,7 +37,6 @@ class PoeSimpleStringModItemFilter(
                     return true
                 }
             }
-        }
         return false
     }
 

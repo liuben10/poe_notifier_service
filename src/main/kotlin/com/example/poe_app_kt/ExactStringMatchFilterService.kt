@@ -9,16 +9,17 @@ typealias ItemFieldExtractor = (PoeItem) -> String?
 class ExactStringMatchFilterService(
         val itemFieldExtractor: ItemFieldExtractor,
         val fieldExtractor: FieldExtractor
-) : PoeItemFilterService {
-    override fun filter(item: PoeItem, filters: List<PoeItemFilter>): Boolean {
-        for(filter in filters) {
-            val itemVal = itemFieldExtractor(item)
-            val filterVal = fieldExtractor(filter)
-            if (itemVal != null && filterVal != null) {
-                return itemVal == filterVal
-            }
+) : PoeItemFilterService() {
+    override fun filterSingle(item: PoeItem, filter: PoeItemFilter): Boolean {
+        val itemVal = itemFieldExtractor(item)
+        val filterVal = fieldExtractor(filter)
+        if (itemVal != null && filterVal != null) {
+            return itemVal == filterVal
         }
         return false
     }
 
+    override fun shouldUseFilter(filter: PoeItemFilter): Boolean {
+        return fieldExtractor(filter) != null
+    }
 }

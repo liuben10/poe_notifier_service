@@ -7,6 +7,7 @@ import com.example.poe_app_kt.PoeModStringItemFilter
 
 data class PoeItemFilter (
     val league: String,
+    var threshold: Int = 1,
     var minIlvl: Int? = 0,
     var maxIlvl: Int? = 0,
     var frameType: Int? = 0,

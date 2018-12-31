@@ -20,13 +20,13 @@ class PoeChangeFilter(
         for (stash in stashes) {
             for (item in stash.items) {
                 val matchVector = mutableListOf<Boolean>()
-                var passes_mandatory = true
+                var passes_all_filters = false
                 for (service in filterServices) {
-                    matchVector.add(service.filter(item, filters))
+                    passes_all_filters  = passes_all_filters || service.filter(item, filters)
                 }
-                val matchedThreshold = vectorThreshold(matchVector)
-//                log.info("item=${item.name} has match threshold $matchedThreshold")
-                if (matchedThreshold >= threshold) {
+//                val matchedThreshold = vectorThreshold(matchVector)
+                if (passes_all_filters) {
+                    log.info("item=${item.name} with mods=${item.explicitMods} has passed all filters and is being added")
                     filteredItems.add(item)
                 }
             }
