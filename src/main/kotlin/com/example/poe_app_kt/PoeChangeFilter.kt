@@ -6,11 +6,17 @@ import com.example.poe_app_kt.model.PoeItemFilter
 import org.slf4j.LoggerFactory
 
 class PoeChangeFilter(
-        val filterServices: List<PoeItemFilterService>, // services that will interpret a filter and perform actions.
-        val filters: List<PoeItemFilter>, // TODO load from disk.
-        val threshold: Int = 1
+        val filters: List<PoeItemFilter> // TODO load from disk.
 ) {
     val log = LoggerFactory.getLogger(PoeChangeFilter::class.simpleName)
+
+    val loadedFilters: MutableMap<String, List<PoeItemFilterChecker>> = mutableMapOf()
+
+    init {
+        for (filter in filters) {
+            loadedFilters[filter.id] = PoeFilterLoader.fromFilter(filter)
+        }
+    }
 
     fun filter(stash_changes: PublicStashChanges): List<PoeItem> {
         val stashes = stash_changes.stashes
@@ -20,12 +26,19 @@ class PoeChangeFilter(
         for (stash in stashes) {
             for (item in stash.items) {
                 val matchVector = mutableListOf<Boolean>()
-                var passes_all_filters = false
-                for (service in filterServices) {
-                    passes_all_filters  = passes_all_filters || service.filter(item, filters)
+                var passesAllFilters = true
+                for (filter in filters) {
+                    val filterCheckers = checkNotNull(loadedFilters.get(filter.id))
+                    var passesIndividualFilter = true
+                    for (checker in filterCheckers) {
+                        passesIndividualFilter  = passesIndividualFilter && checker.filter(item, filters)
+                    }
+                    if (passesIndividualFilter) {
+                        log.info("item=${item} Passed the Individual Filter with id=${filter.id}")
+                    }
+                    passesAllFilters = passesAllFilters && passesIndividualFilter
                 }
-//                val matchedThreshold = vectorThreshold(matchVector)
-                if (passes_all_filters) {
+                if (passesAllFilters) {
                     log.info("item=${item.name} with mods=${item.explicitMods} has passed all filters and is being added")
                     filteredItems.add(item)
                 }

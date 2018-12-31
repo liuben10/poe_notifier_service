@@ -1,9 +1,8 @@
 package com.example.poe_app_kt
 
-import com.example.benja.poebrowser.model.PoeItem
 import com.example.poe_app_kt.interceptors.LoggingInterceptor
 import com.example.poe_app_kt.model.PoeItemFilter
-import com.example.poe_app_kt.model.PoeSimpleStringModItemFilter
+import com.example.poe_app_kt.model.PoeSimpleStringModItemChecker
 import com.example.poe_app_kt.model.PoeStringModFilterType
 import com.google.cloud.datastore.Datastore
 import com.google.cloud.datastore.DatastoreOptions
@@ -48,23 +47,7 @@ class PoeBeanConfiguration {
 
     @Bean
     fun poeItemFilters(): PoeChangeFilter {
-        val modFilters = arrayListOf<PoeItemFilterService>()
-        for (filterType in PoeStringModFilterType.values()) {
-            modFilters.add(PoeSimpleStringModItemFilter(filterType))
-        }
-        modFilters.addAll(
-                arrayListOf(
-                    ExactStringMatchFilterService(
-                            {it -> it.league},
-                            {filter -> filter.league}
-                    ),
-                    ExactStringMatchFilterService(
-                            {it -> it.name},
-                            {filter -> filter.name}
-                    )
-                )
-        )
-        val filter = PoeItemFilter("Betrayal", 2)
+        val filter = PoeItemFilter("Loreweave_Filter", "Betrayal")
         filter.name = "Loreweave"
 //        filter.explicitMods.addAll(
 //                arrayListOf(
@@ -82,9 +65,7 @@ class PoeBeanConfiguration {
 //        )
         val filters = arrayListOf(filter)
         return PoeChangeFilter(
-                modFilters,
-                filters,
-                2
+                filters
         )
     }
 

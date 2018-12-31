@@ -13,7 +13,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>poe_app_kt</name>
 	<description>Demo project for Spring Boot</description>
-    <packaging>war</packaging>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -60,11 +59,6 @@
             <artifactId>klaxon</artifactId>
             <version>3.0.5</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
-            <version>2.0.3.RELEASE</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.cloud/google-cloud-datastore -->
         <dependency>
             <groupId>com.google.cloud</groupId>
@@ -78,11 +72,11 @@
 		<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
 		<testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 		<plugins>
-            <!--<plugin>-->
-                <!--<groupId>org.eclipse.jetty</groupId>-->
-                <!--<artifactId>jetty-maven-plugin</artifactId>-->
-                <!--<version>9.4.2.v20170220</version>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.2.v20170220</version>
+            </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

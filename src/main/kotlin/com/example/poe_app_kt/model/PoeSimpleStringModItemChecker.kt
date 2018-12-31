@@ -1,21 +1,21 @@
 package com.example.poe_app_kt.model
 
 import com.example.benja.poebrowser.model.PoeItem
-import com.example.poe_app_kt.PoeItemFilterService
+import com.example.poe_app_kt.PoeItemFilterChecker
 import com.example.poe_app_kt.PoeModStringItemFilter
 import org.slf4j.LoggerFactory
 import java.util.regex.Pattern
 
-class PoeSimpleStringModItemFilter(
+class PoeSimpleStringModItemChecker(
         val filterType: PoeStringModFilterType
-) : PoeItemFilterService() {
+) : PoeItemFilterChecker() {
     override fun shouldUseFilter(filter: PoeItemFilter): Boolean {
         when(filterType) {
-            PoeStringModFilterType.CRAFTED -> return !filter.craftedMods.isEmpty()
-            PoeStringModFilterType.EXPLICIT -> return !filter.explicitMods.isEmpty()
-            PoeStringModFilterType.IMPLICIT -> return !filter.implicitMods.isEmpty()
-            PoeStringModFilterType.ENCHANT -> return !filter.enchantMods.isEmpty()
-            PoeStringModFilterType.UTILITY -> return !filter.utilityMods.isEmpty()
+            PoeStringModFilterType.CRAFTED -> return filter.required || !filter.craftedMods.isEmpty()
+            PoeStringModFilterType.EXPLICIT -> return filter.required || !filter.explicitMods.isEmpty()
+            PoeStringModFilterType.IMPLICIT -> return filter.required || !filter.implicitMods.isEmpty()
+            PoeStringModFilterType.ENCHANT -> return filter.required || !filter.enchantMods.isEmpty()
+            PoeStringModFilterType.UTILITY -> return filter.required || !filter.utilityMods.isEmpty()
             else -> {
                 log.warn("Unrecognized filter type $filterType")
                 return false
@@ -23,7 +23,7 @@ class PoeSimpleStringModItemFilter(
         }
     }
 
-    val log = LoggerFactory.getLogger(PoeSimpleStringModItemFilter::class.simpleName)
+    val log = LoggerFactory.getLogger(PoeSimpleStringModItemChecker::class.simpleName)
 
     override fun filterSingle(item: PoeItem, filter: PoeItemFilter): Boolean {
             when(filterType) {

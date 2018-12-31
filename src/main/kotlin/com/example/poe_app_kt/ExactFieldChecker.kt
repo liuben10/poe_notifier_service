@@ -4,12 +4,12 @@ import com.example.benja.poebrowser.model.PoeItem
 import com.example.poe_app_kt.model.PoeItemFilter
 
 
-typealias FieldExtractor = (PoeItemFilter) -> String?
-typealias ItemFieldExtractor = (PoeItem) -> String?
-class ExactStringMatchFilterService(
+typealias FieldExtractor = (PoeItemFilter) -> Any?
+typealias ItemFieldExtractor = (PoeItem) -> Any?
+class ExactFieldChecker(
         val itemFieldExtractor: ItemFieldExtractor,
         val fieldExtractor: FieldExtractor
-) : PoeItemFilterService() {
+) : PoeItemFilterChecker() {
     override fun filterSingle(item: PoeItem, filter: PoeItemFilter): Boolean {
         val itemVal = itemFieldExtractor(item)
         val filterVal = fieldExtractor(filter)

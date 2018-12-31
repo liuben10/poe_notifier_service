@@ -5,9 +5,9 @@ runtime_config:
   jdk: openjdk8 # use OpenJDK
 
 manual_scaling:
-  instances: 1
+  instances: 2
 resources:
-  cpu: 4
+  cpu: 2
   memory_gb: 12
   disk_size_gb: 20
 
@@ -21,7 +21,7 @@ liveness_check:
 readiness_check:
   path: "/"
   check_interval_sec: 240
-  timeout_sec: 4
+  timeout_sec: 100
   failure_threshold: 2
   success_threshold: 2
   app_start_timeout_sec: 300
