@@ -1,0 +1,27 @@
+service: default # Id of the service
+env: flex       # Flex environment
+runtime: java   # Java runtime
+runtime_config:
+  jdk: openjdk8 # use OpenJDK
+
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 4
+  memory_gb: 12
+  disk_size_gb: 20
+
+liveness_check:
+   path: "/"
+   check_interval_sec: 240
+   timeout_sec: 4
+   failure_threshold: 2
+   success_threshold: 2
+
+readiness_check:
+  path: "/"
+  check_interval_sec: 240
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+  app_start_timeout_sec: 300
