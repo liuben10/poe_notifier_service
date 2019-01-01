@@ -5,6 +5,18 @@ data class PoeStash(
         val lastCharacterName: String = "",
         val id: String = "",
         val stashType: String = "",
-        val items: List<PoeItem> = mutableListOf(),
+        val items: MutableList<PoeItem> = mutableListOf(),
         val public: Boolean = false
-)
+) {
+    companion object {
+        fun createEmpty(other: PoeStash): PoeStash {
+            return PoeStash(
+                    other.accountName,
+                    other.lastCharacterName,
+                    other.id,
+                    other.stashType,
+                    mutableListOf(),
+                    other.public)
+        }
+    }
+}

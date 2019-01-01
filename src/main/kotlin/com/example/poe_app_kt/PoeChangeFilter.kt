@@ -3,15 +3,17 @@ package com.example.poe_app_kt
 import com.example.benja.poebrowser.model.PoeItem
 import com.example.benja.poebrowser.model.PublicStashChanges
 import com.example.poe_app_kt.model.PoeItemFilter
+import com.example.poe_app_kt.model.PoeItemFilterContainer
+import com.example.poe_app_kt.model.PoeStashAndItemContainer
 import org.slf4j.LoggerFactory
 
 class PoeChangeFilter() {
     val log = LoggerFactory.getLogger(PoeChangeFilter::class.simpleName)
 
-    fun filter(stash_changes: PublicStashChanges, filters: List<PoeItemFilter>? = mutableListOf()): List<PoeItem> {
+    fun filter(stash_changes: PublicStashChanges, filters: List<PoeItemFilter>? = mutableListOf()): PoeItemFilterContainer {
         val stashes = stash_changes.stashes
 
-        val filteredItems = mutableListOf<PoeItem>()
+        val container = PoeStashAndItemContainer()
 
         for (stash in stashes) {
             for (item in stash.items) {
@@ -33,11 +35,11 @@ class PoeChangeFilter() {
                 }
                 if (passesAllFilters) {
                     log.info("item=${item.name} with mods=${item.explicitMods} has passed all filters and is being added")
-                    filteredItems.add(item)
+                    container.addItemToStash(item, stash)
                 }
             }
         }
-        return filteredItems
+        return PoeItemFilterContainer(container.getStashList())
     }
 
     fun vectorThreshold(matchVector: List<Boolean>): Int {

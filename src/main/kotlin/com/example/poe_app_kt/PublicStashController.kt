@@ -23,7 +23,7 @@ class PublicStashController(
         val iterator = PoeStashIterator(restTemplate, checkNotNull(id))
         val changes = iterator.next()
         if (changes != null) {
-            return PoeItemFilterContainer(poeChangeFilter.filter(changes, itemFilters))
+            return poeChangeFilter.filter(changes, itemFilters)
         }
         return PoeItemFilterContainer(arrayListOf())
     }
