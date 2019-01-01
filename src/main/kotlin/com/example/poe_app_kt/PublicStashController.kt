@@ -1,18 +1,11 @@
 package com.example.poe_app_kt
 
-import com.example.benja.poebrowser.model.PoeItem
-import com.example.benja.poebrowser.model.PublicStashChanges
-import com.example.poe_app_kt.interceptors.LoggingInterceptor
+import com.example.poe_app_kt.model.PoeItemFilter
+import com.example.poe_app_kt.model.PoeItemFilterContainer
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpMethod
-import org.springframework.http.client.BufferingClientHttpRequestFactory
-import org.springframework.http.client.ClientHttpRequestInterceptor
-import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.client.RestTemplate
-import java.util.*
 
 @RestController
 class PublicStashController(
@@ -22,27 +15,17 @@ class PublicStashController(
 
     val log = LoggerFactory.getLogger(PublicStashController::class.simpleName)
 
-    @RequestMapping(path = ["/public_stash_items"], method = [RequestMethod.GET])
+    @RequestMapping(path = ["/public_stash_items"], method = [RequestMethod.POST], consumes=["application/json"])
     fun fetchItems(
             @RequestParam(required = false, defaultValue = "308920373-319864529-301688411-345878146-326915367") id: String?,
-            @RequestParam(required = false, defaultValue = "False") shouldFilter: Boolean?): List<PoeItem> {
+            @RequestBody itemFilters: List<PoeItemFilter>? = arrayListOf()): PoeItemFilterContainer {
         log.info("Fetch Items invoked")
         val iterator = PoeStashIterator(restTemplate, checkNotNull(id))
         val changes = iterator.next()
         if (changes != null) {
-            return if (shouldFilter != null && shouldFilter == true) {
-                poeChangeFilter.filter(changes)
-            } else {
-                val items = mutableListOf<PoeItem>()
-                for(stash in changes.stashes) {
-                    for (item in stash.items) {
-                        items.add(item)
-                    }
-                }
-                items
-            }
+            return PoeItemFilterContainer(poeChangeFilter.filter(changes, itemFilters))
         }
-        return arrayListOf()
+        return PoeItemFilterContainer(arrayListOf())
     }
 
     @RequestMapping(path=["/items_without_parsing"], method = [RequestMethod.GET])

@@ -2,7 +2,6 @@ package com.example.poe_app_kt.model
 
 import com.example.benja.poebrowser.model.PoeItem
 import com.example.poe_app_kt.PoeItemFilterChecker
-import com.example.poe_app_kt.PoeModStringItemFilter
 import org.slf4j.LoggerFactory
 import java.util.regex.Pattern
 
@@ -25,7 +24,7 @@ class PoeSimpleStringModItemChecker(
 
     val log = LoggerFactory.getLogger(PoeSimpleStringModItemChecker::class.simpleName)
 
-    override fun filterSingle(item: PoeItem, filter: PoeItemFilter): Boolean {
+    override fun filter(item: PoeItem, filter: PoeItemFilter): Boolean {
             when(filterType) {
                 PoeStringModFilterType.CRAFTED -> return filterCraftedMods(item, filter)
                 PoeStringModFilterType.EXPLICIT -> return filterExplicitMods(item, filter)

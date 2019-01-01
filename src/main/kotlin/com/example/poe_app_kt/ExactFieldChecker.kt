@@ -10,7 +10,7 @@ class ExactFieldChecker(
         val itemFieldExtractor: ItemFieldExtractor,
         val fieldExtractor: FieldExtractor
 ) : PoeItemFilterChecker() {
-    override fun filterSingle(item: PoeItem, filter: PoeItemFilter): Boolean {
+    override fun filter(item: PoeItem, filter: PoeItemFilter): Boolean {
         val itemVal = itemFieldExtractor(item)
         val filterVal = fieldExtractor(filter)
         if (itemVal != null && filterVal != null) {

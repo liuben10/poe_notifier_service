@@ -3,7 +3,6 @@ package com.example.poe_app_kt.model
 import com.example.benja.poebrowser.model.PoeItemProp
 import com.example.benja.poebrowser.model.PoeRequirementSpec
 import com.example.benja.poebrowser.model.PoeSockets
-import com.example.poe_app_kt.PoeModStringItemFilter
 
 data class PoeItemFilter (
         val id: String,

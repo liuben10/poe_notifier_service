@@ -2,8 +2,6 @@ package com.example.poe_app_kt
 
 import com.example.poe_app_kt.interceptors.LoggingInterceptor
 import com.example.poe_app_kt.model.PoeItemFilter
-import com.example.poe_app_kt.model.PoeSimpleStringModItemChecker
-import com.example.poe_app_kt.model.PoeStringModFilterType
 import com.google.cloud.datastore.Datastore
 import com.google.cloud.datastore.DatastoreOptions
 import org.springframework.beans.factory.annotation.Autowired
@@ -64,9 +62,7 @@ class PoeBeanConfiguration {
 //                )
 //        )
         val filters = arrayListOf(filter)
-        return PoeChangeFilter(
-                filters
-        )
+        return PoeChangeFilter()
     }
 
 }

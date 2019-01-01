@@ -1,4 +1,4 @@
-package com.example.poe_app_kt
+package com.example.poe_app_kt.model
 
 data class PoeModStringItemFilter (
     val regex: String,
