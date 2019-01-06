@@ -5,8 +5,9 @@ import com.example.benja.poebrowser.model.PoeRequirementSpec
 import com.example.benja.poebrowser.model.PoeSockets
 
 data class PoeItemFilter (
-        val id: String,
+        val filterName: String? = null,
         val league: String,
+        var id: Long? = null,
         var required: Boolean = false,
         var minIlvl: Int? = -1,
         var maxIlvl: Int? = -1,
