@@ -1,27 +1,27 @@
 package com.example.poe_app_kt
 
-import com.example.benja.poebrowser.model.PoeItem
+import com.example.benja.poebrowser.model.PoeStash
 import com.example.benja.poebrowser.model.PublicStashChanges
 import com.example.poe_app_kt.model.PoeItemFilter
 import com.example.poe_app_kt.model.PoeItemFilterContainer
+import com.example.poe_app_kt.model.PoeItemFilterResults
 import com.example.poe_app_kt.model.PoeStashAndItemContainer
 import org.slf4j.LoggerFactory
 
-class PoeChangeFilter() {
+class PoeChangeFilter {
     val log = LoggerFactory.getLogger(PoeChangeFilter::class.simpleName)
 
-    fun filter(stash_changes: PublicStashChanges, filters: List<PoeItemFilter>? = mutableListOf()): PoeItemFilterContainer {
+    fun filter(stash_changes: PublicStashChanges, filters: List<PoeItemFilter>? = mutableListOf()): PoeItemFilterResults {
         val stashes = stash_changes.stashes
 
-        val container = PoeStashAndItemContainer()
+        val filterToItems = mutableMapOf<Long, PoeItemFilterContainer>().withDefault { PoeItemFilterContainer(mutableListOf()) }
 
-        for (stash in stashes) {
-            for (item in stash.items) {
-                val matchVector = mutableListOf<Boolean>()
-                var passesAllFilters = true
-                if (filters != null) {
-                    for (filter in filters) {
-
+        if (filters != null) {
+            for (filter in filters) {
+                val stashesWithFilteredItems = mutableListOf<PoeStash>()
+                for (stash in stashes) {
+                    val stashWithItems = PoeStash.createEmpty(stash)
+                    for (item in stash.items) {
                         val filterCheckers = PoeFilterLoader.fromFilter(filter)
                         var passesIndividualFilter = true
                         for (checker in filterCheckers) {
@@ -29,26 +29,17 @@ class PoeChangeFilter() {
                         }
                         if (passesIndividualFilter) {
                             log.info("item=${item} Passed the Individual Filter with id=${filter.id}")
+                            stashWithItems.items.add(item)
                         }
-                        passesAllFilters = passesAllFilters && passesIndividualFilter
+                    }
+                    if (stashWithItems.hasItems()) {
+                        stashesWithFilteredItems.add(stashWithItems)
                     }
                 }
-                if (passesAllFilters) {
-                    log.info("item=${item.name} with mods=${item.explicitMods} has passed all filters and is being added")
-                    container.addItemToStash(item, stash)
-                }
+                filterToItems[filter.id] = PoeItemFilterContainer(stashesWithFilteredItems)
             }
+            return PoeItemFilterResults(filterToItems)
         }
-        return PoeItemFilterContainer(container.getStashList())
-    }
-
-    fun vectorThreshold(matchVector: List<Boolean>): Int {
-        var acc = 0
-        for (match in matchVector) {
-            if (match) {
-                acc += 1
-            }
-        }
-        return acc
+        return PoeItemFilterResults(mutableMapOf(-1L to PoeItemFilterContainer(stashes)))
     }
 }

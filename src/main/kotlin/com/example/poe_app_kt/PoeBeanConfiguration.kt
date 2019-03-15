@@ -23,10 +23,10 @@ class PoeBeanConfiguration {
         return restTemplate
     }
 
-    @Bean
-    fun datastore(): Datastore {
-        return  DatastoreOptions.getDefaultInstance().service
-    }
+//    @Bean
+//    fun datastore(): Datastore {
+//        return  DatastoreOptions.getDefaultInstance().service
+//    }
 
     @Bean
     fun clientHttpRequestFactory(): ClientHttpRequestFactory {
@@ -45,7 +45,7 @@ class PoeBeanConfiguration {
 
     @Bean
     fun poeItemFilters(): PoeChangeFilter {
-        val filter = PoeItemFilter("Loreweave_Filter", "Betrayal")
+        val filter = PoeItemFilter("Loreweave_Filter", "Betrayal", 0)
         filter.name = "Loreweave"
 //        filter.explicitMods.addAll(
 //                arrayListOf(

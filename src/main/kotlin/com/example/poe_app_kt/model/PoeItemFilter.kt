@@ -7,7 +7,7 @@ import com.example.benja.poebrowser.model.PoeSockets
 data class PoeItemFilter (
         val filterName: String? = null,
         val league: String,
-        var id: Long? = null,
+        var id: Long,
         var required: Boolean = false,
         var minIlvl: Int? = -1,
         var maxIlvl: Int? = -1,

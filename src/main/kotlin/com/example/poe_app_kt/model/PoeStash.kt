@@ -19,4 +19,8 @@ data class PoeStash(
                     other.public)
         }
     }
+
+    fun hasItems(): Boolean {
+        return !this.items.isEmpty()
+    }
 }
